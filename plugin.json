@@ -1,0 +1,42 @@
+{
+  "name": "toolbox",
+  "author": "jicheng zhao",
+  "url": "https://github.com/siyuan-note/plugin-sample",
+  "version": "0.0.0",
+  "minAppVersion": "3.0.12",
+  "backends": [
+    "windows",
+    "linux",
+    "darwin",
+    "ios",
+    "android"
+  ],
+  "frontends": [
+    "desktop",
+    "mobile",
+    "browser-desktop",
+    "browser-mobile",
+    "desktop-window"
+  ],
+  "displayName": {
+    "default": "toolbox",
+    "zh_CN": "工具箱"
+  },
+  "description": {
+    "default": "toolbox",
+    "zh_CN": "工具箱"
+  },
+  "readme": {
+    "default": "README.md",
+    "zh_CN": "README_zh_CN.md"
+  },
+  "funding": {
+    "openCollective": "",
+    "patreon": "",
+    "github": "",
+    "custom": []
+  },
+  "keywords": [
+    "toolbox"
+  ]
+}
