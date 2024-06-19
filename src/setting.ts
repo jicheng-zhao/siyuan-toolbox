@@ -2,9 +2,7 @@ import {
     Setting
 } from "siyuan";
 import {
-    AIProviders,
-    BaiduAIApiKey,
-    BaiduAIApiSecret
+    AIProviders
 } from "./constants/constants"
 import {
     setLocalStorage,
@@ -73,7 +71,7 @@ class ToolboxSetting extends Setting {
 
                 let baiduApiKeyInput = document.createElement("input")
                 baiduApiKeyInput.setAttribute("id","baidu-apikey-input")
-                baiduApiKeyInput.value=localStorage.getItem("baiduApiKey")??BaiduAIApiKey
+                baiduApiKeyInput.value=localStorage.getItem("baiduApiKey")??""
                 locationDiv.appendChild(baiduApiKeyInput)
                 return locationDiv;
             }
@@ -88,7 +86,7 @@ class ToolboxSetting extends Setting {
 
                 let baiduApiSecretInput = document.createElement("input")
                 baiduApiSecretInput.setAttribute("id","baidu-api-secret-input")
-                baiduApiSecretInput.value=localStorage.getItem("baiduApiSecret")??BaiduAIApiSecret
+                baiduApiSecretInput.value=localStorage.getItem("baiduApiSecret")??""
                 locationDiv.appendChild(baiduApiSecretInput)
                 return locationDiv;
             }

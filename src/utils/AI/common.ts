@@ -2,6 +2,7 @@ import { getBaiduAIResponse } from "./baiduAI";
 import { getGeminiResponse } from "./gemini";
 import { getCurrentBlock, updateBlock, insertBlockList } from "../siyuan-request/block"
 import { destroyDialog } from "../../event/dialog";
+import { informError } from "../siyuan-request/notification"
 
 type AIServiceType = {type:"Chat"|"translation",arg?:string}
 
@@ -38,9 +39,18 @@ function getAIResponse(serviceType:AIServiceType,msg:string){
     }
 }
 
+function checkAPIKey() {
+    if(!localStorage.getItem("AIProvider") || !localStorage.getItem("baiduApiKey") || !localStorage.getItem("baiduApiSecret")){
+        informError("Lack of parameters")
+        return false
+    }
+    return true
+}
+
 export {
     getAIResponse,
     AIServiceType,
     updateToNotebook,
-    updateToAIResponse
+    updateToAIResponse,
+    checkAPIKey
 }

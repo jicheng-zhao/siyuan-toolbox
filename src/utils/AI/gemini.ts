@@ -1,5 +1,5 @@
 import { GeminiApiKey } from "../../constants/constants";
-import { AIServiceType, updateToNotebook, updateToAIResponse } from "../../utils/AI/common";
+import { AIServiceType, updateToNotebook, updateToAIResponse, checkAPIKey } from "../../utils/AI/common";
 import { translationPrompts } from "../../constants/prompts";
 
 function getRequestBody(serviceType:AIServiceType,msg:string) {
@@ -14,6 +14,9 @@ function getRequestBody(serviceType:AIServiceType,msg:string) {
 }
 
 function getGeminiResponse(serviceType:AIServiceType,msg:string) {
+    if(!checkAPIKey()){
+        return
+    }
     fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="+GeminiApiKey,{
         method:"POST",
         body:getRequestBody(serviceType,msg),

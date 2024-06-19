@@ -1,8 +1,11 @@
 import { informError } from "../siyuan-request/notification"
-import { AIServiceType, updateToNotebook, updateToAIResponse } from "../../utils/AI/common";
+import { AIServiceType, updateToNotebook, updateToAIResponse, checkAPIKey } from "../../utils/AI/common";
 import { translationPrompts } from "../../constants/prompts";
 
 async function getAccessToken() {
+    if(!checkAPIKey()){
+        return
+    }
     let res = await fetch("https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id="+localStorage.getItem("baiduApiKey")+"&client_secret="+localStorage.getItem("baiduApiSecret"))
     if(!res.ok){
         informError("baidu api key/secret error")

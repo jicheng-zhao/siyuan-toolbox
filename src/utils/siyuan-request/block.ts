@@ -43,16 +43,18 @@ async function insertBlockList(previousId:string, data:string[], isCode:boolean)
 }
 
 function getCurrentBlock(){
-    let page = document.getElementsByClassName("protyle-wysiwyg protyle-wysiwyg--attr")[0]
+    let pages = document.getElementsByClassName("protyle-wysiwyg protyle-wysiwyg--attr")
     let currentBlockId = ""
     let lastUpdated = ""
-    page.childNodes.forEach(child=>{
-        let element = child as HTMLElement
-        if(element.getAttribute("updated")>lastUpdated){
-            currentBlockId = element.getAttribute("data-node-id")
-            lastUpdated = element.getAttribute("updated")
-        }
-    })
+    for(let i=0;i<pages.length;i++){
+        pages[i].childNodes.forEach(child=>{
+            let element = child as HTMLElement
+            if(element.getAttribute("updated")>lastUpdated){
+                currentBlockId = element.getAttribute("data-node-id")
+                lastUpdated = element.getAttribute("updated")
+            }
+        })
+    }
     return currentBlockId
 }
 
