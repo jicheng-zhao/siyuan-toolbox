@@ -1,12 +1,13 @@
 import { informError } from "../siyuan-request/notification"
 import { AIServiceType, updateToNotebook, updateToAIResponse, checkAPIKey } from "../../utils/AI/common";
 import { translationPrompts } from "../../constants/prompts";
+import { baidu } from "../../constants/constants";
 
 async function getAccessToken() {
-    if(!checkAPIKey()){
+    if(!checkAPIKey(baidu)){
         return
     }
-    let res = await fetch("https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id="+localStorage.getItem("baiduApiKey")+"&client_secret="+localStorage.getItem("baiduApiSecret"))
+    let res = await fetch("https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id="+localStorage.getItem("baidu_api_key")+"&client_secret="+localStorage.getItem("baidu_api_secret"))
     if(!res.ok){
         informError("baidu api key/secret error")
         return
@@ -31,9 +32,9 @@ async function getBaiduAIResponse(serviceType:AIServiceType,msg:string) {
     let res = await fetch("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/ernie-speed-128k?access_token="+access_token,{
         body:getRequestBody(serviceType,msg),
         method:"POST",
-        headers:{
-            "Content-Type":"application/json"
-        }
+        headers:new Headers({
+            'Content-Type':"application/json"
+        })
     })
     let data = await res.json()
     if(data["error_code"]===336501){

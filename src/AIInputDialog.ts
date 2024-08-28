@@ -2,7 +2,8 @@ import {
     Dialog
 } from "siyuan";
 import {
-    getAIResponse
+    getAIResponse,
+    updateToNotebook
 } from "./utils/AI/common";
 import { destroyDialog } from "./event/dialog";
 
@@ -60,7 +61,10 @@ class AIInputDialog extends Dialog {
             title: "toolbox",
             content: getDialogContent(),
             width: "60%",
-            height: "600px"
+            height: "600px",
+            destroyCallback:()=>{
+                // updateToNotebook("")
+            }
         });
 
         let buttonTranslateToEnglish = document.getElementById("button-translate-to-english") as HTMLButtonElement

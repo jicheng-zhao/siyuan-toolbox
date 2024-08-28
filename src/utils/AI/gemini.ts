@@ -1,8 +1,8 @@
-import { GeminiApiKey } from "../../constants/constants";
+import { gemini } from "../../constants/constants";
 import { AIServiceType, updateToNotebook, updateToAIResponse, checkAPIKey } from "../../utils/AI/common";
 import { translationPrompts } from "../../constants/prompts";
 
-function getRequestBody(serviceType:AIServiceType,msg:string) {
+function getRequestBody(serviceType:AIServiceType,msg:string):string {
     if(serviceType.type==="Chat"){
         return JSON.stringify({"contents":{"parts":[{"text":msg}]}})
     }else if(serviceType.type==="translation"){
@@ -14,10 +14,10 @@ function getRequestBody(serviceType:AIServiceType,msg:string) {
 }
 
 function getGeminiResponse(serviceType:AIServiceType,msg:string) {
-    if(!checkAPIKey()){
+    if(!checkAPIKey(gemini)){
         return
     }
-    fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="+GeminiApiKey,{
+    fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="+localStorage.getItem(gemini)||"",{
         method:"POST",
         body:getRequestBody(serviceType,msg),
     }).then(res=>res.json()).then(data=>{

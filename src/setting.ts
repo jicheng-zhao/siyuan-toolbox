@@ -2,40 +2,73 @@ import {
     Setting
 } from "siyuan";
 import {
-    AIProviders
+    AIProviders,
+    baidu,
+    openai,
+    baiduParameters,
+    openAIParameters,
+    gemini,
+    geminiParameters,
+    defaultProvider,
+    defaultParameter
 } from "./constants/constants"
 import {
-    setLocalStorage,
-    getLocalStorage
+    setLocalSetting,
+    getLocalSetting
 } from "./utils/siyuan-request/storage"
-
-type SettingParams = {
-    "AIProvider":string,
-    "baiduApiKey":string,
-    "baiduApiSecret":string
-}
+import { updateToNotebook } from "./utils/AI/common";
+import { getSettingElement } from "./utils/common/common"
 
 class ToolboxSetting extends Setting {
     constructor(options:{
         height: string,
-        width: string,
-        destroyCallback?: () => void
+        width: string
     }){
         super({
             height: options.height,
             width: options.width,
             confirmCallback: ()=>{
-                let setting ={"AIProvider":"","baiduApiKey":"","baiduApiSecret":""}
+                // get current ai provider
+                let setting:any = {"AIProvider":""}
                 let AIProviderSelection = document.getElementById("ai-provider-selection") as HTMLSelectElement
                 setting["AIProvider"] = AIProviderSelection.value
-                let baiduApiKeyInputElement = document.getElementById("baidu-apikey-input") as HTMLInputElement
-                setting["baiduApiKey"] = baiduApiKeyInputElement.value
-                let baiduApiSecretInputElement = document.getElementById("baidu-api-secret-input") as HTMLInputElement
-                setting["baiduApiSecret"] = baiduApiSecretInputElement.value
-                setLocalStorage(setting)
-                console.log("setting is saved",setting)
+
+                if(AIProviderSelection.value==localStorage.getItem("AIProvider")){
+                    // set current ai provider parameter
+                    switch(AIProviderSelection.value){
+                        case baidu:
+                            setting[baidu]={}
+                            baiduParameters.forEach((item:{title:string,param:string})=>{
+                                let element = document.getElementById(item.param+"_input") as HTMLInputElement
+                                setting[baidu][item.param] = element?.value||localStorage.getItem(item.param)||""
+                            })
+                            break
+                        case gemini:
+                            setting[gemini]={}
+                            geminiParameters.forEach((item:{title:string,param:string})=>{
+                                let element = document.getElementById(item.param+"_input") as HTMLInputElement
+                                setting[gemini][item.param] = element?.value||localStorage.getItem(item.param)||""
+                            })
+                            break
+                        case openai:
+                            setting[openai]={}
+                            openAIParameters.forEach((item:{title:string,param:string})=>{
+                                let element = document.getElementById(item.param+"_input") as HTMLInputElement
+                                setting[openai][item.param] = element?.value||localStorage.getItem(item.param)||""
+                            })
+                            break
+                        default:
+                            setting[defaultProvider]={}
+                            defaultParameter.forEach((item:{title:string,param:string})=>{
+                                let element = document.getElementById(item.param+"_input") as HTMLInputElement
+                                setting[defaultProvider][item.param] = element?.value||localStorage.getItem(item.param)||""
+                            })
+                            break
+                    }
+                }
+                setLocalSetting(setting)
             },
-            destroyCallback: options.destroyCallback,
+            destroyCallback: ()=>{},
         })
     }
     setUpElements() {
@@ -55,47 +88,37 @@ class ToolboxSetting extends Setting {
                     optionElement.innerText=AIProviders[i]
                     selectElement.appendChild(optionElement)
                 }
-                selectElement.value=localStorage.getItem("AIProvider")??AIProviders[0]
+                selectElement.value=localStorage.getItem("AIProvider")??defaultProvider
                 locationDiv.appendChild(selectElement);
                 return locationDiv;
             },
             
         })
-        this.addItem({
-            "title":"Baidu API Key",
-            createActionElement: () =>{
-                const locationDiv = document.createElement("div");
-                locationDiv.setAttribute("id", "baidu-apikey-location");
-                locationDiv.style.flex = "flex";
-                locationDiv.style.flexDirection = "row";
-
-                let baiduApiKeyInput = document.createElement("input")
-                baiduApiKeyInput.setAttribute("id","baidu-apikey-input")
-                baiduApiKeyInput.value=localStorage.getItem("baiduApiKey")??""
-                locationDiv.appendChild(baiduApiKeyInput)
-                return locationDiv;
-            }
-        })
-        this.addItem({
-            "title":"Baidu API Secret",
-            createActionElement: () =>{
-                const locationDiv = document.createElement("div");
-                locationDiv.setAttribute("id", "baidu-api-secret-location");
-                locationDiv.style.flex = "flex";
-                locationDiv.style.flexDirection = "row";
-
-                let baiduApiSecretInput = document.createElement("input")
-                baiduApiSecretInput.setAttribute("id","baidu-api-secret-input")
-                baiduApiSecretInput.value=localStorage.getItem("baiduApiSecret")??""
-                locationDiv.appendChild(baiduApiSecretInput)
-                return locationDiv;
-            }
-        })
-        getLocalStorage()
+        switch(localStorage.getItem("AIProvider")){
+            case baidu:
+                baiduParameters.forEach((item:{title:string,param:string})=>{
+                    this.addItem(getSettingElement(item))
+                })
+                break
+            case gemini:
+                geminiParameters.forEach((item:{title:string,param:string})=>{
+                    this.addItem(getSettingElement(item))
+                })
+                break
+            case openai:
+                openAIParameters.forEach((item:{title:string,param:string})=>{
+                    this.addItem(getSettingElement(item))
+                })
+                break
+            default:
+                defaultParameter.forEach((item:{title:string,param:string})=>{
+                    this.addItem(getSettingElement(item))
+                })
+        }
+        getLocalSetting()
     }
 }
 
 export {
-    ToolboxSetting,
-    SettingParams
+    ToolboxSetting
 }

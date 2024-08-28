@@ -1,6 +1,6 @@
 {
   "name": "siyuan-toolbox",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "This is toolbox plugin for siyuan",
   "main": ".src/index.js",
   "scripts": {

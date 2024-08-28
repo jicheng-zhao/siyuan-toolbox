@@ -3,18 +3,12 @@ import {
 } from "siyuan";
 import AIInputDialog from "./AIInputDialog";
 import { ToolboxSetting } from "./setting";
-import { getLocalStorage } from "./utils/siyuan-request/storage";
+import { getLocalSetting } from "./utils/siyuan-request/storage";
 
 
 class ToolboxPlugin extends Plugin {
     async onload(){
-        getLocalStorage()
-        const setting = new ToolboxSetting({
-            height: "300px",
-            width: "600px",
-        });
-        setting.setUpElements();
-        this.setting = setting
+        getLocalSetting()
 
         this.protyleSlash.push({
             filter: [".","。"],
@@ -24,6 +18,14 @@ class ToolboxPlugin extends Plugin {
                 new AIInputDialog();
             }
         });
+    }
+    async openSetting() {
+        const setting = new ToolboxSetting({
+            height: "500px",
+            width: "600px",
+        });
+        setting.setUpElements();
+        setting.open("toolbox")
     }
 }
 
